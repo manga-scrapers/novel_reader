@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class SearchBook {
   String? name;
   String? bookLink;
@@ -17,5 +19,16 @@ class SearchBook {
     thumbnailLink = thumbnailLink?.trim();
     latestChapterInfo = latestChapterInfo?.trim();
     author = author?.trim();
+  }
+
+  @override
+  String toString() {
+    return jsonEncode({
+      'name': name,
+      'bookLink': bookLink,
+      'thumbnailLink': thumbnailLink,
+      'latestChapterInfo': latestChapterInfo,
+      'author': author,
+    });
   }
 }

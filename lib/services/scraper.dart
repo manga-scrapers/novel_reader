@@ -34,7 +34,8 @@ class Scraper {
 
     var document = parse(response.body);
 
-    var searchList = document.querySelectorAll("div#list-page > div.row");
+    var searchList =
+        document.querySelector("#list-page")!.querySelectorAll("div.row");
 
     for (var eachItem in searchList) {
       var doc = parse(eachItem.innerHtml);
@@ -57,7 +58,7 @@ class Scraper {
         thumbnailLink: imgLink,
         author: author,
       );
-
+      // log("[+] scraper.dart: " + sb.toString());
       list.add(sb);
     }
 

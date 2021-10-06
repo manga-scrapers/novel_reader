@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:novel_reader/models/search_book.dart';
 import 'package:novel_reader/services/scraper.dart';
@@ -23,12 +25,26 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
 
   @override
   Widget buildResults(BuildContext context) {
+    return buildSuggestions(context);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    if (query.trim().length < 3) {
+      return const Center(
+        child: Text("query size >= 3"),
+      );
+    }
+
     return FutureBuilder<List<SearchBook>>(
       future: Scraper.getSearchBooksList(query),
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
+          // log(snapshot.data.toString());
+
           return ListView.builder(
+            itemCount: snapshot.data!.length,
             itemBuilder: (context, index) {
               final sb = snapshot.data![index];
               return ListTile(
@@ -41,6 +57,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
         }
 
         if (snapshot.hasError) {
+          log("[-] Error in search delegate");
           return Center(
             child: Column(
               children: [
@@ -60,11 +77,5 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
         );
       },
     );
-  }
-
-  @override
-  Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    throw UnimplementedError();
   }
 }
