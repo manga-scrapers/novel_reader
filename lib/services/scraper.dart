@@ -34,8 +34,10 @@ class Scraper {
 
     var document = parse(response.body);
 
-    var searchList =
-        document.querySelector("#list-page")!.querySelectorAll("div.row");
+    var searchList = document
+        .querySelector("#list-page")!
+        .querySelector("div.list.list-novel")!
+        .querySelectorAll("div.row");
 
     for (var eachItem in searchList) {
       var doc = parse(eachItem.innerHtml);
