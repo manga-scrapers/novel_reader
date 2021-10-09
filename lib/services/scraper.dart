@@ -46,7 +46,7 @@ class Scraper {
 
       var x = doc.querySelector("h3.novel-title > a");
       var bookName = x?.text.trim();
-      var bookLink = x?.attributes['href'];
+      var bookLink = x?.attributes['href']!.trim();
 
       var author = doc.querySelector("span.author")?.text.trim();
 

@@ -12,6 +12,6 @@ class Favorites {
   // List of books favorited
   static const List<Book> favBooks = [];
 
-  // periodically update book details
+// periodically update book details
 
 }

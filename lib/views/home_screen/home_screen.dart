@@ -2,9 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:novel_reader/models/search_book.dart';
-import 'package:novel_reader/services/custom_search_delegate.dart';
-
-part 'search_book_tile.dart';
+import 'package:novel_reader/views/search_screen/custom_search_delegate.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
