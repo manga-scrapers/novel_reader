@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:novel_reader/constants.dart';
-import 'package:novel_reader/views/home_screen/home_screen.dart';
+import 'package:novel_reader/ui/home_screen/home_screen.dart';
 import 'package:url_strategy/url_strategy.dart';
 
 void main() {

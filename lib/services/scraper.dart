@@ -1,7 +1,7 @@
 import 'dart:developer';
 
+import 'package:get/get.dart';
 import 'package:html/parser.dart';
-import 'package:http/http.dart' as http;
 import 'package:novel_reader/constants.dart';
 import 'package:novel_reader/models/search_book.dart';
 
@@ -14,22 +14,22 @@ class Scraper {
 
   Scraper._singleton();
 
-  final client = http.Client();
-
   //
-  static Future<List<SearchBook>> getSearchBooksList(String query) async {
+  static Future<List<SearchBook>> getSearchBooksList(
+    String query,
+    GetHttpClient client,
+  ) async {
     query = _getFormattedQuery(query);
     List<SearchBook> list = [];
 
-    var url = Uri.parse(kUrl + "search?keyword=" + query);
+    var url = kUrl + "search?keyword=" + query;
 
-    var response = await http.get(url);
+    var response = await client.get(url);
 
     if (response.statusCode != 200) {
-      log("[-] Error in fetching search books list",
-          error: response.statusCode);
-      return Future.error(
-          "[-] Error in fetching search books list: ${response.statusCode}");
+      var errorMsg = "[-] Error in fetching search books list";
+      log(errorMsg, error: response.statusCode);
+      return Future.error("$errorMsg: ${response.statusCode}");
     }
 
     // Logic

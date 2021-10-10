@@ -3,15 +3,22 @@ import 'dart:developer';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_html/shims/dart_ui_real.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:novel_reader/models/search_book.dart';
 import 'package:novel_reader/services/scraper.dart';
+import 'package:simple_animations/simple_animations.dart';
+
+part '../components/indicators.dart';
 
 part 'search_book_tile.dart';
 
 class CustomSearchDelegate extends SearchDelegate<SearchBook> {
+  /// The client for downloading data
+  final _client = GetHttpClient();
+
   @override
   List<Widget>? buildActions(BuildContext context) {
     return <Widget>[
@@ -47,9 +54,18 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
     return suggestionsView(context);
   }
 
+  @override
+  void close(BuildContext context, SearchBook result) {
+    // close client
+    _client.close();
+
+    //
+    super.close(context, result);
+  }
+
   Widget suggestionsView(BuildContext context) {
     return FutureBuilder<List<SearchBook>>(
-      future: Scraper.getSearchBooksList(query),
+      future: Scraper.getSearchBooksList(query, _client),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           var searchResults = snapshot.data!;
@@ -76,6 +92,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
             bottomLeft: Radius.circular(12.0),
           ),
           child: Container(
+            color: Colors.white.withOpacity(0),
             constraints: BoxConstraints(
               maxWidth: context.width * 0.75,
               maxHeight: context.height * 0.5,
@@ -124,7 +141,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
 
   Widget displaySearchResults(BuildContext context) {
     return FutureBuilder<List<SearchBook>>(
-      future: Scraper.getSearchBooksList(query),
+      future: Scraper.getSearchBooksList(query, _client),
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {
@@ -138,7 +155,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
           return errorWidget(snapshot, context);
         }
 
-        return progressIndicator();
+        return Indicators.loadingProgressIndicator(context);
       },
     );
   }
@@ -156,18 +173,6 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
         ],
       ),
     );
-  }
-
-  Widget progressIndicator() {
-    return const Center(
-      child: SpinKitRotatingCircle(
-        color: Colors.amber,
-      ),
-    );
-    // return const LinearProgressIndicator(
-    //   color: Colors.red,
-    //   backgroundColor: Colors.amber,
-    // );
   }
 
   Center errorWidget(

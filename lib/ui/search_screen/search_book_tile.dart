@@ -19,9 +19,13 @@ class SearchBookTile extends StatelessWidget {
           children: [
             Expanded(
               child: CachedNetworkImage(
+                useOldImageOnUrlChange: true,
                 imageUrl: "${book.thumbnailLink}",
                 fit: BoxFit.fill,
-                placeholder: (context, url) => const Icon(Icons.downloading),
+                placeholder: (context, url) => const Icon(
+                  Icons.downloading,
+                  color: Colors.lightGreen,
+                ),
               ),
             ),
             const SizedBox(width: 4.0),

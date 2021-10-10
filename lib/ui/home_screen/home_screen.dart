@@ -1,8 +1,13 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:novel_reader/models/book_chapter.dart';
+import 'package:novel_reader/models/favorites.dart';
 import 'package:novel_reader/models/search_book.dart';
-import 'package:novel_reader/views/search_screen/custom_search_delegate.dart';
+import 'package:novel_reader/ui/search_screen/custom_search_delegate.dart';
+
+part 'book_tile.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,7 +30,9 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Container(),
+        child: Wrap(
+          children: [for (var e in Favorites.favBooks) BookTile(book: e)],
+        ),
       ),
     );
   }
