@@ -14,6 +14,8 @@ class Scraper {
 
   Scraper._singleton();
 
+  final client = http.Client();
+
   //
   static Future<List<SearchBook>> getSearchBooksList(String query) async {
     query = _getFormattedQuery(query);

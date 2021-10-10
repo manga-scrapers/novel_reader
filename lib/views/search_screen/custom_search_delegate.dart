@@ -70,46 +70,52 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
           width: context.width,
           height: context.height,
         ),
-        AnimatedContainer(
-          width: context.width * 0.75,
-          // height: context.height * 0.5, // todo: make it adjustable
-          color: Colors.white,
-          curve: Curves.linearToEaseOut,
-          duration: const Duration(seconds: 1),
-          child: ListView.builder(
-            itemCount: searchResults.length,
-            itemBuilder: (context, index) {
-              var element = searchResults.elementAt(index);
-              return Material(
-                elevation: 4.0,
-                child: ListTile(
-                  onLongPress: () {
-                    Clipboard.setData(ClipboardData(text: "${element.name}"));
-                    GFToast.showToast(
-                      "Copied",
-                      context,
-                      toastPosition: GFToastPosition.BOTTOM,
-                    );
-                  },
-                  title: Text(
-                    "${element.name}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  subtitle: Text(
-                    "${element.author}",
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: context.textTheme.caption,
-                  ),
-                  onTap: () {
-                    if (element.name != null) query = element.name!;
+        ClipRRect(
+          borderRadius: const BorderRadius.only(
+            bottomRight: Radius.circular(12.0),
+            bottomLeft: Radius.circular(12.0),
+          ),
+          child: Container(
+            constraints: BoxConstraints(
+              maxWidth: context.width * 0.75,
+              maxHeight: context.height * 0.5,
+            ),
+            child: ListView.builder(
+              shrinkWrap: true,
+              itemCount: searchResults.length,
+              itemBuilder: (context, index) {
+                var element = searchResults.elementAt(index);
+                return Material(
+                  elevation: 4.0,
+                  child: ListTile(
+                    onLongPress: () {
+                      Clipboard.setData(ClipboardData(text: "${element.name}"));
+                      GFToast.showToast(
+                        "Copied",
+                        context,
+                        toastPosition: GFToastPosition.BOTTOM,
+                      );
+                    },
+                    title: Text(
+                      "${element.name}",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                    subtitle: Text(
+                      "${element.author}",
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: context.textTheme.caption,
+                    ),
+                    onTap: () {
+                      if (element.name != null) query = element.name!;
 
-                    showResults(context);
-                  },
-                ),
-              );
-            },
+                      showResults(context);
+                    },
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ],
@@ -129,7 +135,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
         }
 
         if (snapshot.hasError) {
-          return errorWidget(snapshot);
+          return errorWidget(snapshot, context);
         }
 
         return progressIndicator();
@@ -164,14 +170,18 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
     // );
   }
 
-  Center errorWidget(AsyncSnapshot<List<SearchBook>> snapshot) {
+  Center errorWidget(
+      AsyncSnapshot<List<SearchBook>> snapshot, BuildContext context) {
     log("[-] Error in search delegate");
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(
+          Icon(
             Icons.error,
             color: Colors.red,
+            size: context.width * 0.25,
           ),
           Text("${snapshot.error}"),
         ],

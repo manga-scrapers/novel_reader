@@ -7,24 +7,32 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
 import 'package:novel_reader/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Search screen appbar and home screen appbar tests',
+      (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Favorites page
+    expect(find.text('Favorites'), findsOneWidget);
+    expect(find.byIcon(Icons.search), findsOneWidget);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Tap the 'search' icon and trigger a frame.
+    await tester.tap(find.byIcon(Icons.search));
     await tester.pump();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that our search screen shows
+    expect(find.text('Search'), findsOneWidget);
+    expect(find.byIcon(Icons.clear), findsOneWidget);
+    expect(find.byIcon(Icons.search), findsOneWidget);
+
+    await tester.tap(find.byType(BackButton));
+    await tester.pump();
+
+    // Favorites page
+    expect(find.text('Favorites'), findsOneWidget);
+    expect(find.byIcon(Icons.search), findsOneWidget);
   });
 }
