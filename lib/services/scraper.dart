@@ -72,6 +72,30 @@ class Scraper {
     return list;
   }
 
+  /// Get search suggestions for [query]
+  static Future<List<String>> getSearchSuggestions(
+      String query, GetHttpClient client) async {
+    query = _getFormattedQuery(query);
+    if (query.length < 3) {
+      return [];
+    }
+    var url = kUrl + "ajax/search-novel?keyword=$query";
+    var response = await client.get(url);
+    if (response.statusCode != 200) {
+      log("[-] Error in suggestions: ", error: response.statusCode);
+      return Future.error(
+          "[-] Error in suggestions: ${response.status.toString()}");
+    }
+
+    var doc = parse(response.body);
+    List<String> results = [];
+    var e = doc.querySelectorAll("a");
+    for (int i = 0; i < e.length - 1; i++) {
+      results.add(e[i].text.trim());
+    }
+    return results;
+  }
+
   /// Get [Book] from [SearchBook] obtained in [getSearchBooksList]
   static Future<Book> getBook(
     SearchBook searchBook, [

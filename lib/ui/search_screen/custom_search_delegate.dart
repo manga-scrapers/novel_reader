@@ -61,20 +61,32 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
   }
 
   Widget suggestionsView(BuildContext context) {
-    return FutureBuilder<List<SearchBook>>(
-      future: Scraper.getSearchBooksList(query, _client),
+    return FutureBuilder<List<String>>(
+      future: Scraper.getSearchSuggestions(query, _client),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           var searchResults = snapshot.data!;
-          return stackOfSuggestions(context, searchResults);
+          return Column(
+            children: [
+              Visibility(
+                visible: snapshot.connectionState != ConnectionState.done,
+                child: const LinearProgressIndicator(
+                  color: Colors.red,
+                  backgroundColor: Colors.amber,
+                ),
+              ),
+              Expanded(
+                child: stackOfSuggestions(context, searchResults),
+              ),
+            ],
+          );
         }
         return const SizedBox();
       },
     );
   }
 
-  Stack stackOfSuggestions(
-      BuildContext context, List<SearchBook> searchResults) {
+  Stack stackOfSuggestions(BuildContext context, List<String> searchResults) {
     return Stack(
       alignment: AlignmentDirectional.topCenter,
       children: [
@@ -103,7 +115,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
                   elevation: 4.0,
                   child: ListTile(
                     onLongPress: () {
-                      Clipboard.setData(ClipboardData(text: "${element.name}"));
+                      Clipboard.setData(ClipboardData(text: element));
                       GFToast.showToast(
                         "Copied",
                         context,
@@ -111,19 +123,12 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
                       );
                     },
                     title: Text(
-                      "${element.name}",
+                      element,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                    ),
-                    subtitle: Text(
-                      "${element.author}",
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: context.textTheme.caption,
                     ),
                     onTap: () {
-                      if (element.name != null) query = element.name!;
-
+                      query = element;
                       showResults(context);
                     },
                   ),
