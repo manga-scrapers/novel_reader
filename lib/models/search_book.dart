@@ -2,20 +2,20 @@ import 'dart:convert';
 
 class SearchBook {
   String? name;
-  String? bookLink;
+  String bookLink;
   String? thumbnailLink;
   String? latestChapterInfo;
   String? author;
 
   SearchBook({
     this.name,
-    this.bookLink,
+    required this.bookLink,
     this.thumbnailLink,
     this.latestChapterInfo,
     this.author,
   }) {
     name = name?.trim();
-    bookLink = bookLink?.trim();
+    bookLink = bookLink.trim();
     thumbnailLink = thumbnailLink?.trim();
     latestChapterInfo = latestChapterInfo?.trim();
     author = author?.trim();

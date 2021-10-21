@@ -9,7 +9,7 @@ class BookTile extends StatelessWidget {
     return Column(
       children: [
         CachedNetworkImage(
-          imageUrl: "${book.thumbnailLink}",
+          imageUrl: book.thumbnailLink,
           useOldImageOnUrlChange: true,
           placeholder: (context, url) => const Icon(
             Icons.download,
@@ -17,7 +17,7 @@ class BookTile extends StatelessWidget {
           ),
         ),
         Text(
-          "${book.name}",
+          book.name,
           maxLines: 1,
         ),
         Text(

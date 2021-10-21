@@ -4,14 +4,11 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_html/shims/dart_ui_real.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/getwidget.dart';
 import 'package:novel_reader/models/search_book.dart';
 import 'package:novel_reader/services/scraper.dart';
-import 'package:simple_animations/simple_animations.dart';
-
-part '../components/indicators.dart';
+import 'package:novel_reader/ui/components/indicators.dart';
 
 part 'search_book_tile.dart';
 
@@ -155,7 +152,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
           return errorWidget(snapshot, context);
         }
 
-        return Indicators.loadingProgressIndicator(context);
+        return Indicators.loadingProgressIndicator();
       },
     );
   }
