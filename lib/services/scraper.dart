@@ -16,14 +16,15 @@ class Scraper {
 
   Scraper._singleton();
 
+  static final client = GetHttpClient();
+
   /// Get books list for query [query]
   static Future<List<SearchBook>> getSearchBooksList(
     String query,
-    GetHttpClient client,
   ) async {
     query = _getFormattedQuery(query);
     List<SearchBook> list = [];
-    var url = kUrl + "search?keyword=" + query;
+    var url = kUrl + "/search?keyword=" + query;
 
     var response = await client.get(url);
 
@@ -73,13 +74,12 @@ class Scraper {
   }
 
   /// Get search suggestions for [query]
-  static Future<List<String>> getSearchSuggestions(
-      String query, GetHttpClient client) async {
+  static Future<List<String>> getSearchSuggestions(String query) async {
     query = _getFormattedQuery(query);
     if (query.length < 3) {
       return [];
     }
-    var url = kUrl + "ajax/search-novel?keyword=$query";
+    var url = kUrl + "/ajax/search-novel?keyword=$query";
     var response = await client.get(url);
     if (response.statusCode != 200) {
       log("[-] Error in suggestions: ", error: response.statusCode);
@@ -97,19 +97,12 @@ class Scraper {
   }
 
   /// Get [Book] from [SearchBook] obtained in [getSearchBooksList]
-  static Future<Book> getBook(
-    SearchBook searchBook, [
-    GetHttpClient? client,
-  ]) async {
+  static Future<Book> getBook(SearchBook searchBook) async {
     String bookLink = searchBook.bookLink.contains(kUrl)
         ? searchBook.bookLink
         : kUrl + searchBook.bookLink;
 
-    // todo: Should GetConnect() be used?
-
-    Response response = await (client != null
-        ? client.get(bookLink)
-        : GetConnect().get(bookLink));
+    Response response = await client.get(bookLink);
 
     if (response.statusCode != 200) {
       log("[-] Error fetching book: ",
@@ -140,14 +133,14 @@ class Scraper {
         .map((e) => e.text.trim())
         .toList();
 
-    double ratingValue = document
-        .querySelector("span[itemprop=ratingValue]")!
-        .text
-        .trim() as double;
-    double bestRating = document
-        .querySelector("span[itemprop=bestRating]")!
-        .text
-        .trim() as double;
+    double ratingValue = double.tryParse(document
+            .querySelector("span[itemprop=ratingValue]")!
+            .text
+            .trim()) ??
+        -1.0;
+    double bestRating = double.tryParse(
+            document.querySelector("span[itemprop=bestRating]")!.text.trim()) ??
+        10;
     double bookRating = (ratingValue / bestRating) * 100;
 
     String bookDescription =
@@ -164,7 +157,7 @@ class Scraper {
         .text
         .trim();
 
-    List<Chapter> bookChaptersList = _getChaptersList(document);
+    List<Chapter> bookChaptersList = await _getChaptersList(document, client);
 
     return Book(
       name: bookName,
@@ -180,9 +173,35 @@ class Scraper {
     );
   }
 
-  static List<Chapter> _getChaptersList(Document document) {
+  static Future<List<Chapter>> _getChaptersList(
+      Document doc, GetHttpClient client) async {
     List<Chapter> chaptersList = [];
-    throw UnimplementedError("Implement this");
+
+    var novelId =
+        doc.querySelector("div[data-novel-id]")?.attributes["data-novel-id"];
+    var newUrl =
+        "https://readnovelfull.com/ajax/chapter-archive?novelId=$novelId";
+
+    var response = await client.get(newUrl);
+    if (response.statusCode != 200) {
+      log("[-] Error in fetching chapters list: ", error: response.status);
+      return Future.error(
+          "[-] Error in fetching chapters list: ${response.statusCode}");
+    }
+
+    doc = parse(response.body);
+    var e = doc.querySelectorAll("a");
+    for (var a in e) {
+      // TODO(p2kr) : error handling
+      var link = kUrl + (a.attributes['href'])!;
+      var name = a.text.trim();
+      var chapter = Chapter(
+        name: name,
+        chapterLink: link,
+      );
+      chaptersList.add(chapter);
+    }
+
     return chaptersList;
   }
 

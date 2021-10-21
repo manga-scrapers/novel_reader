@@ -1,21 +1,16 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:novel_reader/models/book_chapter.dart';
 import 'package:novel_reader/models/search_book.dart';
 import 'package:novel_reader/services/scraper.dart';
 import 'package:novel_reader/ui/components/indicators.dart';
 
 part 'chapters_list.dart';
-
 part 'header.dart';
 
 class BookScreen extends StatelessWidget {
-  BookScreen({Key? key, required this.sb}) : super(key: key);
+  const BookScreen({Key? key, required this.sb}) : super(key: key);
   final SearchBook sb;
-
-  final _client =
-      Get.find<GetHttpClient>(tag: "client"); // todo: where to close() this?
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +21,7 @@ class BookScreen extends StatelessWidget {
         ),
       ),
       body: FutureBuilder<Book>(
-          future: Scraper.getBook(sb, _client),
+          future: Scraper.getBook(sb),
           builder: (context, snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {

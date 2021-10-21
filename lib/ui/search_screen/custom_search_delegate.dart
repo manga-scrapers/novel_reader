@@ -62,7 +62,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
 
   Widget suggestionsView(BuildContext context) {
     return FutureBuilder<List<String>>(
-      future: Scraper.getSearchSuggestions(query, _client),
+      future: Scraper.getSearchSuggestions(query),
       builder: (context, snapshot) {
         if (snapshot.hasData && snapshot.data!.isNotEmpty) {
           var searchResults = snapshot.data!;
@@ -143,7 +143,7 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
 
   Widget displaySearchResults(BuildContext context) {
     return FutureBuilder<List<SearchBook>>(
-      future: Scraper.getSearchBooksList(query, _client),
+      future: Scraper.getSearchBooksList(query),
       builder: (context, snapshot) {
         if (snapshot.hasData &&
             snapshot.connectionState == ConnectionState.done) {

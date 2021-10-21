@@ -37,6 +37,7 @@ class Indicators {
   static Widget shimmerProgressIndicator(BuildContext context) {
     return GFShimmer(
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(child: _emptyHeader(context)),
           const SizedBox(height: 12.0),
@@ -54,11 +55,15 @@ class Indicators {
     return Column(
       children: List<Widget>.generate(
         5,
-        (index) => Container(
-          padding: const EdgeInsets.all(8.0),
-          height: heightOfEachTile,
-          width: context.width,
-          color: Colors.white,
+        (index) => Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Container(
+              height: heightOfEachTile,
+              width: context.width,
+              color: Colors.white,
+            ),
+          ),
         ),
       ),
     );
@@ -66,13 +71,13 @@ class Indicators {
 
   static Widget _emptyHeader(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.all(16.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 54,
-            height: 46,
+            width: 90,
+            height: 160,
             color: Colors.white,
           ),
           const SizedBox(width: 12),
@@ -82,19 +87,19 @@ class Indicators {
               children: <Widget>[
                 Container(
                   width: double.infinity,
-                  height: 8,
+                  height: 16,
                   color: Colors.white,
                 ),
                 const SizedBox(height: 6),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.5,
-                  height: 8,
+                  height: 16,
                   color: Colors.white,
                 ),
                 const SizedBox(height: 6),
                 Container(
                   width: MediaQuery.of(context).size.width * 0.25,
-                  height: 8,
+                  height: 16,
                   color: Colors.white,
                 ),
               ],

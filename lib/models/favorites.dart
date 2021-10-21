@@ -1,4 +1,4 @@
-import 'package:novel_reader/models/book_chapter.dart';
+import 'package:novel_reader/models/search_book.dart';
 
 class Favorites {
   static final Favorites _instance = Favorites._singleton();
@@ -10,7 +10,7 @@ class Favorites {
   Favorites._singleton();
 
   // List of books favorited
-  static const List<Book> favBooks = [];
+  static const List<SearchBook> favBooks = [];
 
 // periodically update book details
 
