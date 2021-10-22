@@ -9,9 +9,13 @@ class ChaptersListView extends StatelessWidget {
     return ListView.builder(
       itemCount: chaptersList.length,
       itemBuilder: (context, index) {
-        var chapter = chaptersList[index];
+        final chapter = chaptersList[index];
         return ListTile(
+          tileColor: index % 2 == 0 ? Colors.white : Colors.grey,
           title: Text(chapter.name),
+          onTap: () {
+            // TODO: implement this
+          },
         );
       },
     );

@@ -141,13 +141,14 @@ class Scraper {
     double bestRating = double.tryParse(
             document.querySelector("span[itemprop=bestRating]")!.text.trim()) ??
         10;
-    double bookRating = (ratingValue / bestRating) * 100;
+    double bookRating = (ratingValue / bestRating) * 10;
 
     String bookDescription =
         document.querySelector("#tab-description")!.text.trim();
 
     String bookStatus = document
-        .querySelectorAll("ul.info.info-meta > li")[4]
+        .querySelectorAll("ul.info.info-meta > li")
+        .last
         .querySelector("a.text-primary")!
         .text
         .trim();
