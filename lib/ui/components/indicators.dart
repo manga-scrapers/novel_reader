@@ -109,4 +109,16 @@ class Indicators {
       ),
     );
   }
+
+  static Widget errorIndicator(String error) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.error),
+          Text(error),
+        ],
+      ),
+    );
+  }
 }

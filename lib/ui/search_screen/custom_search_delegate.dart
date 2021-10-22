@@ -154,7 +154,12 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
         }
 
         if (snapshot.hasError) {
-          return errorWidget(snapshot, context);
+          log(
+            "[-] Error in search delegate",
+            error: snapshot.error,
+            stackTrace: snapshot.stackTrace,
+          );
+          return Indicators.errorIndicator("Error in searching");
         }
 
         return Indicators.loadingProgressIndicator();
@@ -172,25 +177,6 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
             size: context.width * 0.25,
           ),
           Text("No match found for '$query'"),
-        ],
-      ),
-    );
-  }
-
-  Center errorWidget(
-      AsyncSnapshot<List<SearchBook>> snapshot, BuildContext context) {
-    log("[-] Error in search delegate");
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.error,
-            color: Colors.red,
-            size: context.width * 0.25,
-          ),
-          Text("${snapshot.error}"),
         ],
       ),
     );

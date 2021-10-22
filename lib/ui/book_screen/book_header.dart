@@ -30,15 +30,18 @@ class BookScreenHeader extends StatelessWidget {
                 style: context.textTheme.subtitle1?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
+                overflow: TextOverflow.ellipsis,
               ),
-              Text(
-                "Author: ${book.author}",
-                maxLines: 1,
-                style: context.textTheme.subtitle2,
+              _labelAndText("Author: ", book.author, context),
+              _labelAndText(
+                "Genres: ",
+                book.getGenresFormatted(),
+                context,
+                toolTip: true,
               ),
-              Text("Genres: ${book.getGenresFormatted()}", maxLines: 1),
-              Text("Rating: ${book.getRatingFormatted()}", maxLines: 1),
-              Text("Status: ${book.status}", maxLines: 1),
+              _labelAndText("Rating: ", book.getRatingFormatted(), context),
+              if (book.status != null)
+                _labelAndText("Status: ", book.status!, context),
             ],
           ),
         ),
@@ -46,13 +49,41 @@ class BookScreenHeader extends StatelessWidget {
     );
   }
 
-  Widget _scrollableText(String msg, {TextStyle? style}) {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Text(
-        msg,
-        style: style,
+  Widget _labelAndText(
+    String label,
+    String text,
+    BuildContext context, {
+    bool toolTip = false,
+  }) {
+    final Text labelWidget = Text(
+      label,
+      style: context.textTheme.subtitle2?.copyWith(
+        fontWeight: FontWeight.w600,
       ),
+    );
+    final Text textWidget = Text(
+      text,
+      maxLines: 2,
+      style: context.textTheme.subtitle2,
+      overflow: TextOverflow.ellipsis,
+    );
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        labelWidget,
+        Expanded(
+          child: toolTip
+              ? Tooltip(
+                  waitDuration: const Duration(seconds: 1),
+                  triggerMode: TooltipTriggerMode.longPress,
+                  message: text,
+                  child: textWidget,
+                )
+              : textWidget,
+        )
+      ],
     );
   }
 }

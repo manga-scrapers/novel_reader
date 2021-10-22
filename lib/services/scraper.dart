@@ -198,12 +198,27 @@ class Scraper {
       var name = a.text.trim();
       var chapter = Chapter(
         name: name,
-        chapterLink: link,
+        chapterLink: link.trim(),
       );
       chaptersList.add(chapter);
     }
 
     return chaptersList;
+  }
+
+  static Future<String?> getChapterText(Chapter chapter) async {
+    var response = await client.get(chapter.chapterLink);
+    if (response.statusCode != 200) {
+      var msg = "[-] Error in getChapterText: ";
+      log(msg, error: response.status);
+      return Future.error("$msg ${response.statusCode}");
+    }
+
+    var doc = parse(response.body);
+
+    var text = doc.getElementById("chr-content")?.innerHtml;
+
+    return text?.trim();
   }
 
   static String _getFormattedQuery(String query) {

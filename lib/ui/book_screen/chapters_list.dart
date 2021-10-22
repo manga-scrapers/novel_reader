@@ -15,6 +15,7 @@ class ChaptersListView extends StatelessWidget {
           title: Text(chapter.name),
           onTap: () {
             // TODO: implement this
+            Get.to(() => ChapterView(chapter: chapter));
           },
         );
       },

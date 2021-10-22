@@ -20,6 +20,7 @@ dependencies:
   url_strategy: ^0.2.0
   get: ^4.3.8
   flutter_html: ^2.1.4
+  webview_flutter: 2.1.2
   http: ^0.13.4
   html: ^0.15.0
   getwidget: ^2.0.4
