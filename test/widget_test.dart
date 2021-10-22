@@ -13,7 +13,7 @@ void main() {
   testWidgets('Search screen appbar and home screen appbar tests',
       (WidgetTester tester) async {
     // Build our app and trigger a frame.
-    await tester.pumpWidget(MyApp());
+    await tester.pumpWidget(const MyApp());
 
     // Favorites page
     expect(find.text('Favorites'), findsOneWidget);

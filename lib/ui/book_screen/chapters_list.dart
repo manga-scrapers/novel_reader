@@ -10,9 +10,11 @@ class ChaptersListView extends StatelessWidget {
       itemCount: chaptersList.length,
       itemBuilder: (context, index) {
         final chapter = chaptersList[index];
-        return ListTile(
-          tileColor: index % 2 == 0 ? Colors.white : Colors.grey,
-          title: Text(chapter.name),
+        return GFListTile(
+          margin: const EdgeInsets.symmetric(vertical: 2, horizontal: 2),
+          padding: const EdgeInsets.all(4.0),
+          color: Colors.white.withOpacity(0.5),
+          titleText: chapter.name,
           onTap: () {
             // TODO: implement this
             Get.to(() => ChapterView(chapter: chapter));

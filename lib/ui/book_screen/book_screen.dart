@@ -5,15 +5,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:novel_reader/models/book_chapter.dart';
 import 'package:novel_reader/models/search_book.dart';
 import 'package:novel_reader/services/scraper.dart';
 import 'package:novel_reader/ui/components/indicators.dart';
 
 part 'book_header.dart';
-
 part 'chapter_view.dart';
-
 part 'chapters_list.dart';
 
 class BookScreen extends StatelessWidget {

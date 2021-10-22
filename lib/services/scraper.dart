@@ -29,9 +29,9 @@ class Scraper {
     var response = await client.get(url);
 
     if (response.statusCode != 200) {
-      var errorMsg = "[-] Error in fetching search books list";
-      log(errorMsg, error: response.statusCode);
-      return Future.error("$errorMsg: ${response.statusCode}");
+      log("[-] Error in getSearchBooksList: ", error: response.statusCode);
+      return Future.error(
+          "Error in fetching search books list: ${response.statusCode}");
     }
 
     // Logic
@@ -82,9 +82,9 @@ class Scraper {
     var url = kUrl + "/ajax/search-novel?keyword=$query";
     var response = await client.get(url);
     if (response.statusCode != 200) {
-      log("[-] Error in suggestions: ", error: response.statusCode);
+      log("[-] Error in getSearchSuggestions: ", error: response.statusCode);
       return Future.error(
-          "[-] Error in suggestions: ${response.status.toString()}");
+          "Error in fetching suggestions: ${response.statusCode}");
     }
 
     var doc = parse(response.body);
@@ -105,10 +105,8 @@ class Scraper {
     Response response = await client.get(bookLink);
 
     if (response.statusCode != 200) {
-      log("[-] Error fetching book: ",
-          error: "${response.statusCode} (${response.status})");
-      return Future.error(
-          "[-] Error fetching book: ${response.statusCode} (${response.status})");
+      log("[-] Error getBook: ", error: "${response.statusCode}");
+      return Future.error("Error fetching book: ${response.statusCode}");
     }
 
     var document = parse(response.body, sourceUrl: bookLink);
@@ -185,9 +183,9 @@ class Scraper {
 
     var response = await client.get(newUrl);
     if (response.statusCode != 200) {
-      log("[-] Error in fetching chapters list: ", error: response.status);
+      log("[-] Error in _getChaptersList: ", error: response.statusCode);
       return Future.error(
-          "[-] Error in fetching chapters list: ${response.statusCode}");
+          "Error in fetching chapters list: ${response.statusCode}");
     }
 
     doc = parse(response.body);
@@ -209,9 +207,8 @@ class Scraper {
   static Future<String?> getChapterText(Chapter chapter) async {
     var response = await client.get(chapter.chapterLink);
     if (response.statusCode != 200) {
-      var msg = "[-] Error in getChapterText: ";
-      log(msg, error: response.status);
-      return Future.error("$msg ${response.statusCode}");
+      log("[-] Error in getChapterText: ", error: response.statusCode);
+      return Future.error("Error in fetching chapter: ${response.statusCode}");
     }
 
     var doc = parse(response.body);
