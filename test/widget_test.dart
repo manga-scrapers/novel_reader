@@ -9,7 +9,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:novel_reader/main.dart';
 
+class CustomBindings extends AutomatedTestWidgetsFlutterBinding {
+  @override
+  bool get overrideHttpClient => false;
+}
+
 void main() {
+  CustomBindings();
   testWidgets('Search screen appbar and home screen appbar tests',
       (WidgetTester tester) async {
     // Build our app and trigger a frame.
@@ -21,7 +27,7 @@ void main() {
 
     // Tap the 'search' icon and trigger a frame.
     await tester.tap(find.byIcon(Icons.search));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Verify that our search screen shows
     expect(find.text('Search'), findsOneWidget);
@@ -29,7 +35,7 @@ void main() {
     expect(find.byIcon(Icons.search), findsOneWidget);
 
     await tester.tap(find.byType(BackButton));
-    await tester.pump();
+    await tester.pumpAndSettle();
 
     // Favorites page
     expect(find.text('Favorites'), findsOneWidget);
