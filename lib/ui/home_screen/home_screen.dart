@@ -37,15 +37,24 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Obx(
           () {
-            return GridView.builder(
-              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 150,
-              ),
-              itemCount: Favorites.favBooks.length,
-              itemBuilder: (context, index) {
-                return BookTile(searchBook: Favorites.favBooks[index]);
-              },
-            );
+            if (Favorites.favBooks.isNotEmpty) {
+              return GridView.builder(
+                gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                  maxCrossAxisExtent: 150,
+                ),
+                itemCount: Favorites.favBooks.length,
+                itemBuilder: (context, index) {
+                  return BookTile(searchBook: Favorites.favBooks[index]);
+                },
+              );
+            } else {
+              return const Center(
+                child: Text(
+                  "Favorite books to appear here.",
+                  textAlign: TextAlign.center,
+                ),
+              );
+            }
           },
         ),
       ),

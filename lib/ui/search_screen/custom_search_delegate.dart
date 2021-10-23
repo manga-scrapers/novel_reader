@@ -61,6 +61,14 @@ class CustomSearchDelegate extends SearchDelegate<SearchBook> {
   }
 
   Widget suggestionsView(BuildContext context) {
+    if (query.trim().length < 3) {
+      return const Center(
+        child: Text(
+          "Enter at least 3 character to show suggestions.",
+          textAlign: TextAlign.center,
+        ),
+      );
+    }
     return FutureBuilder<List<String>>(
       future: Scraper.getSearchSuggestions(query),
       builder: (context, snapshot) {
