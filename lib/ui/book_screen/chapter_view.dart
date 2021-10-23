@@ -18,6 +18,7 @@ class ChapterView extends StatelessWidget {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
               return SingleChildScrollView(
+                restorationId: chapter.chapterLink,
                 child: InteractiveViewer(
                   child: Html(
                     data: snapshot.data,
