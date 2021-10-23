@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:novel_reader/models/favorites.dart';
@@ -33,8 +35,18 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: SafeArea(
-        child: Wrap(
-          children: [for (var e in Favorites.favBooks) BookTile(searchBook: e)],
+        child: Obx(
+          () {
+            return GridView.builder(
+              gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 150,
+              ),
+              itemCount: Favorites.favBooks.length,
+              itemBuilder: (context, index) {
+                return BookTile(searchBook: Favorites.favBooks[index]);
+              },
+            );
+          },
         ),
       ),
     );

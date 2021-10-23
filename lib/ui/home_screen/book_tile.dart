@@ -6,10 +6,38 @@ class BookTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 90,
-      height: 160,
-      color: Colors.amber,
+    return GestureDetector(
+      onTap: () {
+        // Open the book
+        Get.to(() => BookScreen(searchBook: searchBook));
+      },
+      child: Card(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: CachedNetworkImage(
+                fit: BoxFit.fill,
+                imageUrl: searchBook.thumbnailLink ?? "",
+                useOldImageOnUrlChange: true,
+                placeholder: (context, url) {
+                  return const Icon(Icons.download);
+                },
+              ),
+            ),
+            Text(
+              searchBook.name ?? "??",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+            Text(
+              searchBook.latestChapterInfo ?? "??",
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

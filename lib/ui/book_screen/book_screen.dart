@@ -7,6 +7,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:getwidget/components/list_tile/gf_list_tile.dart';
 import 'package:novel_reader/models/book_chapter.dart';
+import 'package:novel_reader/models/favorites.dart';
 import 'package:novel_reader/models/search_book.dart';
 import 'package:novel_reader/services/scraper.dart';
 import 'package:novel_reader/ui/components/indicators.dart';
@@ -16,8 +17,13 @@ part 'chapter_view.dart';
 part 'chapters_list.dart';
 
 class BookScreen extends StatelessWidget {
-  const BookScreen({Key? key, required this.searchBook}) : super(key: key);
+  BookScreen({Key? key, required this.searchBook}) : super(key: key) {
+    isFavorite = Favorites.isFavorite(searchBook).obs;
+  }
+
   final SearchBook searchBook;
+
+  late final Rx<bool> isFavorite;
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +38,24 @@ class BookScreen extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
         ),
+        actions: [
+          Obx(() {
+            return IconButton(
+              icon: Icon(
+                isFavorite.isTrue ? Icons.favorite : Icons.favorite_border,
+              ),
+              onPressed: () {
+                // Add to favorites
+                if (isFavorite.isFalse) {
+                  Favorites.favBooks.add(searchBook);
+                } else {
+                  Favorites.removeFavorite(searchBook);
+                }
+                isFavorite.value = Favorites.isFavorite(searchBook);
+              },
+            );
+          }),
+        ],
       ),
       body: SafeArea(
         child: FutureBuilder<Book>(

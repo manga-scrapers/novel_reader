@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:get/get.dart';
 import 'package:getwidget/components/shimmer/gf_shimmer.dart';
 import 'package:simple_animations/stateless_animation/mirror_animation.dart';
 
@@ -39,7 +38,7 @@ class Indicators {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: _emptyHeader(context)),
+          _emptyHeader(context),
           const SizedBox(height: 12.0),
           Expanded(
             flex: 2,
@@ -51,21 +50,30 @@ class Indicators {
   }
 
   static Widget _emptyChapters(BuildContext context) {
-    var heightOfEachTile = (context.height / 5) - 16 * 5;
-    return Column(
-      children: List<Widget>.generate(
-        5,
-        (index) => Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Container(
-              height: heightOfEachTile,
-              width: context.width,
-              color: Colors.white,
-            ),
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        int itemCount = 3; // TODO: make it dynamic
+        return Column(
+          children: List.generate(
+            itemCount,
+            (index) {
+              return Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16.0,
+                    vertical: 2.0,
+                  ),
+                  child: Container(
+                    height: constraints.maxHeight / 2,
+                    width: constraints.maxWidth,
+                    color: Colors.white,
+                  ),
+                ),
+              );
+            },
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
