@@ -17,9 +17,35 @@ class ChapterView extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasData &&
                 snapshot.connectionState == ConnectionState.done) {
+              // return InAppWebView(
+              //   initialFile: chapter.text,
+              // );
               return SingleChildScrollView(
                 child: Html(
                   data: snapshot.data,
+                  onImageError: (exception, stackTrace) {
+                    log(
+                      "Error loading html image: ",
+                      error: exception,
+                      stackTrace: stackTrace,
+                    );
+                  },
+                  customImageRenders: {
+                    networkSourceMatcher(): networkImageRender(
+                      headers: {
+                        "Referer": "https://readnovelfull.com/",
+                        "User-Agent": kUserAgent
+                      },
+                      altWidget: (alt) => Text(alt ?? ""),
+                      loadingWidget: () => const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: SpinKitRotatingCircle(
+                          size: 14,
+                          color: Colors.amber,
+                        ),
+                      ),
+                    ),
+                  },
                 ),
               );
             }
